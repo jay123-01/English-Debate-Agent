@@ -33,6 +33,20 @@ function sendJson(res, status, payload) {
   res.end(JSON.stringify(payload));
 }
 
+function publicErrorMessage(error) {
+  const message = String(error?.message || "Server error");
+
+  if (/Headers\.append|Authorization|Bearer|sk-[A-Za-z0-9_-]+/.test(message)) {
+    return "AI provider configuration is invalid. Check server environment variables.";
+  }
+
+  if (/Transcription failed|Response generation failed|Embedding failed|Speech generation failed|OpenAI|Anthropic/i.test(message)) {
+    return "AI provider request failed. Check server logs.";
+  }
+
+  return message.replace(/sk-[A-Za-z0-9_-]+/g, "[redacted]").slice(0, 240);
+}
+
 function getRequestOrigin(req) {
   const host = req.headers.host || `localhost:${config.port}`;
   const protocol = req.headers["x-forwarded-proto"] || "http";
@@ -54,6 +68,7 @@ module.exports = {
   cleanText,
   getRequestOrigin,
   parseHistory,
+  publicErrorMessage,
   readJson,
   sendJson,
   setCorsHeaders,

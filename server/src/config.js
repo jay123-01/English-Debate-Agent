@@ -5,14 +5,14 @@ loadEnvFile(path.join(__dirname, "..", ".env"));
 
 const config = {
   port: Number(process.env.PORT || 8787),
-  openaiApiKey: process.env.OPENAI_API_KEY || "",
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY || "",
+  openaiApiKey: cleanSingleLineSecret(process.env.OPENAI_API_KEY),
+  anthropicApiKey: cleanSingleLineSecret(process.env.ANTHROPIC_API_KEY),
   responseModel: process.env.OPENAI_RESPONSE_MODEL || "gpt-5.5",
   transcriptionModel: process.env.OPENAI_TRANSCRIBE_MODEL || "gpt-4o-transcribe",
   embeddingModel: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small",
   ttsModel: process.env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts",
   anthropicModel: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
-  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || "",
+  telegramBotToken: cleanSingleLineSecret(process.env.TELEGRAM_BOT_TOKEN),
   telegramAllowedUserIds: parseCsv(process.env.TELEGRAM_ALLOWED_USER_IDS),
   telegramPollTimeoutSeconds: Number(process.env.TELEGRAM_POLL_TIMEOUT_SECONDS || 30),
   maxAudioBytes: Number(process.env.MAX_AUDIO_BYTES || 15 * 1024 * 1024),
@@ -54,4 +54,11 @@ function parseCsv(value) {
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function cleanSingleLineSecret(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)[0] || "";
 }

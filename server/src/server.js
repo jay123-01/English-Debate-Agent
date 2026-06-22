@@ -7,6 +7,7 @@ const {
   cleanText,
   getRequestOrigin,
   parseHistory,
+  publicErrorMessage,
   readJson,
   sendJson,
   setCorsHeaders,
@@ -69,7 +70,8 @@ const server = http.createServer(async (req, res) => {
 
     sendJson(res, 404, { error: "Not found" });
   } catch (error) {
-    sendJson(res, 500, { error: error.message || "Server error" });
+    console.error(error);
+    sendJson(res, 500, { error: publicErrorMessage(error) });
   }
 });
 
