@@ -2,6 +2,9 @@ const { createJsonResponse } = require("../services/openai");
 
 async function analyzeArgument(argument, options = {}) {
   const fallback = analyzeArgumentWithHeuristics(argument, options);
+  if (options.fast) {
+    return fallback;
+  }
 
   try {
     const result = await analyzeArgumentWithModel(argument, options);

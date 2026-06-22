@@ -17,6 +17,7 @@ class Trace {
 
 async function createDebateTurn(payload, options = {}) {
   const trace = options.trace || new Trace();
+  const isFast = payload.responseMode === "fast" || options.responseMode === "fast";
   const phase = getDebatePhase(payload.history);
   const retrievalStarted = Date.now();
   const retrieval = payload.sourceId
@@ -38,26 +39,34 @@ async function createDebateTurn(payload, options = {}) {
     phase,
     sourceTitle: retrieval.source?.title,
     sourceContext: retrieval.contextText,
+    responseMode: isFast ? "fast" : "full",
   });
   trace.add("Debate agent", Date.now() - debateStarted);
 
-  const coachStarted = Date.now();
-  const feedback = await analyzeArgument(payload.argument, {
-    sourceContext: retrieval.contextText,
-    phase,
-  });
-  trace.add("Coach agent", Date.now() - coachStarted);
-
-  const ttsStarted = Date.now();
-  const audio = await buildTtsAudio({
-    text: debate.reply,
-    persona: debate.tts,
-    origin: options.origin,
-    mode: options.audioMode || "url",
-  });
-  if (audio) {
-    trace.add("TTS agent", Date.now() - ttsStarted);
-  }
+  const [feedback, audio] = await Promise.all([
+    withTimedTrace({
+      label: "Coach agent",
+      trace,
+      task: () =>
+        analyzeArgument(payload.argument, {
+          sourceContext: retrieval.contextText,
+          phase,
+          fast: isFast,
+        }),
+    }),
+    withTimedTrace({
+      label: "TTS agent",
+      trace,
+      task: () =>
+        buildTtsAudio({
+          text: debate.reply,
+          persona: debate.tts,
+          origin: options.origin,
+          mode: isFast ? "none" : options.audioMode || "url",
+        }),
+      shouldTrace: (audioResult) => Boolean(audioResult),
+    }),
+  ]);
 
   return {
     reply: debate.reply,
@@ -75,6 +84,15 @@ async function createDebateTurn(payload, options = {}) {
     })),
     latency: trace.items,
   };
+}
+
+async function withTimedTrace({ label, trace, task, shouldTrace = () => true }) {
+  const started = Date.now();
+  const result = await task();
+  if (shouldTrace(result)) {
+    trace.add(label, Date.now() - started);
+  }
+  return result;
 }
 
 async function buildTtsAudio({ text, persona, origin, mode }) {

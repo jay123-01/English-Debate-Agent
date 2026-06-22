@@ -106,6 +106,7 @@ export function useDebateController() {
           aiStance,
           level,
           personaId,
+          responseMode: "fast",
           history: recentHistory,
         });
         handleAgentResult(result, "voice");
@@ -177,6 +178,7 @@ export function useDebateController() {
         aiStance,
         level,
         personaId,
+        responseMode: "fast",
         history: recentHistory,
       });
       handleAgentResult(result, "typed");

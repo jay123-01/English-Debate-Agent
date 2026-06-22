@@ -11,6 +11,7 @@ export async function submitVoiceTurn({
   aiStance,
   level,
   personaId,
+  responseMode,
 }) {
   const formData = new FormData();
 
@@ -33,6 +34,9 @@ export async function submitVoiceTurn({
   }
   if (personaId) {
     formData.append("personaId", personaId);
+  }
+  if (responseMode) {
+    formData.append("responseMode", responseMode);
   }
   formData.append("history", JSON.stringify(history || []));
   formData.append("audio", {
@@ -72,6 +76,7 @@ export async function submitTextTurn({
   aiStance,
   level,
   personaId,
+  responseMode,
 }) {
   return request("/api/text-turn", {
     method: "POST",
@@ -88,6 +93,7 @@ export async function submitTextTurn({
       aiStance,
       level,
       personaId,
+      responseMode,
       history: history || [],
     }),
   });
