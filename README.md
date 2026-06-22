@@ -1,6 +1,8 @@
-# Voice Debate Lab
+# English Debate Agent
 
-This repo now has two prototypes:
+Source-grounded English debate practice with an Expo mobile app, a Node API server, and a Telegram bot client.
+
+This repo has two prototypes:
 
 - `mobile-app/`: the real Expo mobile app direction.
 - root `index.html` + `server.js`: the earlier web/PWA prototype.
@@ -8,9 +10,9 @@ This repo now has two prototypes:
 For the mobile app, start with [mobile-app/README.md](mobile-app/README.md).
 For the Node API and Telegram bot client, start with [server/README.md](server/README.md).
 
-A small voice debate agent prototype.
+## Earlier Web Prototype
 
-The first version is intentionally simple:
+The root web prototype is intentionally simple:
 
 - Browser speech recognition turns your voice into text.
 - A debate agent generates an opposing response.
