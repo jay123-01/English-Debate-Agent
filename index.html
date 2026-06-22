@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#107c72" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Voice Debate Lab" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
+    <title>Voice Debate Lab</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Voice AI Agent</p>
+          <h1>Voice Debate Lab</h1>
+        </div>
+        <div class="topbar-actions">
+          <span id="serverStatus" class="status-pill neutral">Checking agent</span>
+          <button id="installAppBtn" class="ghost-button" type="button" hidden>Install app</button>
+          <button id="clearSessionBtn" class="ghost-button" type="button">Clear</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="side-pane setup-pane" aria-label="Debate setup">
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Session</p>
+              <h2>Debate Setup</h2>
+            </div>
+
+            <label class="field">
+              <span>Topic</span>
+              <select id="topicSelect">
+                <option>Should AI be used in education?</option>
+                <option>Should social media be regulated?</option>
+                <option>Should schools replace exams with projects?</option>
+                <option>Should remote work become the default?</option>
+                <option>Should governments fund space exploration?</option>
+              </select>
+            </label>
+
+            <fieldset class="segmented" aria-label="Your stance">
+              <legend>Your stance</legend>
+              <label>
+                <input type="radio" name="stance" value="support" checked />
+                <span>Support</span>
+              </label>
+              <label>
+                <input type="radio" name="stance" value="oppose" />
+                <span>Oppose</span>
+              </label>
+            </fieldset>
+
+            <label class="field">
+              <span>AI tempo</span>
+              <input id="tempoRange" type="range" min="75" max="115" value="92" />
+            </label>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Pipeline</p>
+              <h2>Fast Path</h2>
+            </div>
+            <div id="pipelineView" class="pipeline-view"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Timing</p>
+              <h2>Latency Trace</h2>
+            </div>
+            <div id="latencyView" class="latency-view"></div>
+          </section>
+        </aside>
+
+        <section class="voice-stage" aria-label="Voice debate workspace">
+          <section class="listen-surface">
+            <div class="topic-strip">
+              <span id="activeTopic">Should AI be used in education?</span>
+              <span id="activeMode" class="status-pill">Fast response</span>
+            </div>
+
+            <div id="voiceMeter" class="voice-meter" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="mic-control">
+              <button id="micButton" class="mic-button" type="button">
+                <span class="mic-dot"></span>
+                <span id="micButtonText">Start speaking</span>
+              </button>
+              <p id="transcriptStatus" class="transcript-status">Ready</p>
+            </div>
+
+            <div class="live-transcript">
+              <p class="eyebrow">Live transcript</p>
+              <p id="liveTranscript">Your spoken argument will appear here.</p>
+            </div>
+          </section>
+
+          <section class="composer-panel">
+            <label class="field">
+              <span>Text fallback</span>
+              <textarea id="typedArgument" rows="3" placeholder="Type an English argument if your browser speech recognition is unavailable."></textarea>
+            </label>
+            <button id="sendTextBtn" class="solid-button" type="button">Send argument</button>
+          </section>
+
+          <section class="conversation-panel">
+            <div class="section-heading inline-heading">
+              <div>
+                <p class="eyebrow">Debate</p>
+                <h2>Conversation</h2>
+              </div>
+              <span id="turnCount" class="status-pill neutral">0 turns</span>
+            </div>
+            <div id="conversationList" class="conversation-list"></div>
+          </section>
+        </section>
+
+        <aside class="side-pane feedback-pane" aria-label="Agent feedback">
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Agents</p>
+              <h2>Layer Status</h2>
+            </div>
+            <div id="layerList" class="layer-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Coach</p>
+              <h2>Feedback</h2>
+            </div>
+            <div id="feedbackView" class="feedback-view"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Memory</p>
+              <h2>Session Notes</h2>
+            </div>
+            <div id="memoryView" class="memory-view"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./src/app.js" type="module"></script>
+  </body>
+</html>

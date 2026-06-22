@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.env.local
+mobile-app/.expo/
+.codegraph/
+server/storage/
+.DS_Store
+Thumbs.db

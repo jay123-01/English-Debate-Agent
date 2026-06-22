@@ -1,0 +1,31 @@
+﻿{
+  "expo": {
+    "name": "Voice Debate Lab",
+    "slug": "voice-debate-lab",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "voicedebate",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.grunj.voicedebatelab",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Voice Debate Lab records your speech so the debate agent can transcribe and respond to your argument."
+      }
+    },
+    "android": {
+      "package": "com.grunj.voicedebatelab"
+    },
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow Voice Debate Lab to record your debate practice.",
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ]
+    ]
+  }
+}

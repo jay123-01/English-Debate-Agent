@@ -1,0 +1,28 @@
+{
+  "name": "Voice Debate Lab",
+  "short_name": "Debate Lab",
+  "description": "A voice-first English debate agent for practicing spoken arguments.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f6f7",
+  "theme_color": "#107c72",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start debate",
+      "short_name": "Debate",
+      "description": "Open the voice debate workspace.",
+      "url": "/"
+    }
+  ]
+}

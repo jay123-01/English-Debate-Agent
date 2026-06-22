@@ -1,0 +1,14 @@
+{
+  "name": "voice-debate-agent-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend API for the Voice Debate Lab mobile app.",
+  "scripts": {
+    "start": "node src/server.js",
+    "telegram": "node src/telegramBot.js",
+    "check": "node --check src/server.js && node --check src/telegramBot.js && node --check src/config.js && node --check src/http/multipart.js && node --check src/http/httpUtils.js && node --check src/services/openai.js && node --check src/services/anthropic.js && node --check src/services/debatePhase.js && node --check src/services/debateTurn.js && node --check src/services/telegramApi.js && node --check src/services/ttsStore.js && node --check src/services/rag/chunkSource.js && node --check src/services/rag/sourceStore.js && node --check src/services/rag/retrieveContext.js && node --check src/agents/sourceAgent.js && node --check src/agents/debateAgent.js && node --check src/agents/debatePersonas.js && node --check src/agents/coachAgent.js && node --check src/agents/sessionAgent.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

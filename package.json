@@ -1,0 +1,12 @@
+{
+  "name": "voice-debate-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A beginner-friendly voice debate agent prototype with replaceable AI layers.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

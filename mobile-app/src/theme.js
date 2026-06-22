@@ -1,0 +1,33 @@
+export const colors = {
+  background: "#f5f3ee",
+  surface: "#fffefa",
+  surfaceMuted: "#ece9e0",
+  surfaceRaised: "#ffffff",
+  ink: "#151512",
+  inkSoft: "#292824",
+  onInk: "#fffdf7",
+  muted: "#706b61",
+  line: "#ded9ce",
+  lavender: "#eeeaff",
+  lavenderStrong: "#7567e8",
+  lavenderInk: "#4036a2",
+  lime: "#e7fb57",
+  limeInk: "#323800",
+  green: "#008f6d",
+  greenSoft: "#dff4eb",
+  amber: "#a86608",
+  amberSoft: "#fff0c9",
+  coral: "#c4493f",
+  coralSoft: "#ffe2de",
+  shadow: "#151512",
+  teal: "#008f6d",
+  tealSoft: "#dff4eb",
+};
+
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 14,
+  lg: 20,
+  xl: 28,
+};
