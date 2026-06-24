@@ -34,39 +34,46 @@ async function createDebateTurn(payload, options = {}) {
   }
 
   const debateStarted = Date.now();
-  const debate = await generateDebateReply({
-    ...payload,
-    phase,
-    sourceTitle: retrieval.source?.title,
-    sourceContext: retrieval.contextText,
-    responseMode: isFast ? "fast" : "full",
+  const feedbackPromise = withTimedTrace({
+    label: "Coach agent",
+    trace,
+    task: () =>
+      analyzeArgument(payload.argument, {
+        sourceContext: retrieval.contextText,
+        phase,
+        fast: isFast,
+      }),
   });
+
+  let debate;
+  try {
+    debate = await generateDebateReply({
+      ...payload,
+      phase,
+      sourceTitle: retrieval.source?.title,
+      sourceContext: retrieval.contextText,
+      responseMode: isFast ? "fast" : "full",
+    });
+  } catch (error) {
+    await feedbackPromise.catch(() => null);
+    throw error;
+  }
   trace.add("Debate agent", Date.now() - debateStarted);
 
-  const [feedback, audio] = await Promise.all([
-    withTimedTrace({
-      label: "Coach agent",
-      trace,
-      task: () =>
-        analyzeArgument(payload.argument, {
-          sourceContext: retrieval.contextText,
-          phase,
-          fast: isFast,
-        }),
-    }),
-    withTimedTrace({
-      label: "TTS agent",
-      trace,
-      task: () =>
-        buildTtsAudio({
-          text: debate.reply,
-          persona: debate.tts,
-          origin: options.origin,
-          mode: isFast ? "none" : options.audioMode || "url",
-        }),
-      shouldTrace: (audioResult) => Boolean(audioResult),
-    }),
-  ]);
+  const audioPromise = withTimedTrace({
+    label: "TTS agent",
+    trace,
+    task: () =>
+      buildTtsAudio({
+        text: debate.reply,
+        persona: debate.tts,
+        origin: options.origin,
+        mode: isFast ? "none" : options.audioMode || "url",
+      }),
+    shouldTrace: (audioResult) => Boolean(audioResult),
+  });
+
+  const [feedback, audio] = await Promise.all([feedbackPromise, audioPromise]);
 
   return {
     reply: debate.reply,

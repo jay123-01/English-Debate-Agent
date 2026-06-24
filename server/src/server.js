@@ -1,4 +1,6 @@
 const http = require("node:http");
+const fs = require("node:fs/promises");
+const path = require("node:path");
 
 const { createSessionSummary } = require("./agents/sessionAgent");
 const { createSource } = require("./agents/sourceAgent");
@@ -16,6 +18,19 @@ const { parseMultipartForm, readRequestBuffer } = require("./http/multipart");
 const { Trace, createDebateTurn } = require("./services/debateTurn");
 const { transcribeAudio } = require("./services/openai");
 const { getTtsClip } = require("./services/ttsStore");
+
+const staticRoot = path.join(__dirname, "..", "public");
+const mimeTypes = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+};
 
 const server = http.createServer(async (req, res) => {
   setCorsHeaders(res);
@@ -65,6 +80,11 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === "POST" && url.pathname === "/api/session-summary") {
       await handleSessionSummary(req, res);
+      return;
+    }
+
+    if (req.method === "GET" && !url.pathname.startsWith("/api/")) {
+      await serveStaticFile(url, res);
       return;
     }
 
@@ -209,4 +229,41 @@ async function handleTtsClip(url, res) {
     "Cache-Control": "private, max-age=1800",
   });
   res.end(clip.buffer);
+}
+
+async function serveStaticFile(url, res) {
+  const pathname = decodeURIComponent(url.pathname);
+  const requestPath = pathname === "/" ? "/index.html" : pathname;
+  const filePath = path.normalize(path.join(staticRoot, requestPath.replace(/^\/+/, "")));
+
+  if (!isInsideStaticRoot(filePath)) {
+    res.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
+    res.end("Forbidden");
+    return;
+  }
+
+  try {
+    const data = await fs.readFile(filePath);
+    const ext = path.extname(filePath).toLowerCase();
+    const cacheControl = ext === ".html" || path.basename(filePath) === "sw.js"
+      ? "no-cache"
+      : "public, max-age=3600";
+
+    res.writeHead(200, {
+      "Content-Type": mimeTypes[ext] || "application/octet-stream",
+      "Cache-Control": cacheControl,
+    });
+    res.end(data);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end("Not found");
+      return;
+    }
+    throw error;
+  }
+}
+
+function isInsideStaticRoot(filePath) {
+  return filePath === staticRoot || filePath.startsWith(`${staticRoot}${path.sep}`);
 }

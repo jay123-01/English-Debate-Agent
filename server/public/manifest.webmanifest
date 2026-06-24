@@ -1,0 +1,27 @@
+{
+  "name": "Voice Debate Lab",
+  "short_name": "Debate Lab",
+  "description": "Source-grounded English debate practice.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f7f6",
+  "theme_color": "#0f766e",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Debate Lab",
+      "short_name": "Debate",
+      "url": "/"
+    }
+  ]
+}

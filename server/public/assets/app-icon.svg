@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Voice Debate Lab icon">
+  <rect width="512" height="512" rx="96" fill="#0f766e"/>
+  <path d="M148 178c0-47 38-85 85-85h46c47 0 85 38 85 85v92c0 47-38 85-85 85h-13l-75 61c-13 11-33 1-33-16v-49c-39-10-68-45-68-87v-86z" fill="#ffffff"/>
+  <path d="M181 188c0-16 13-29 29-29h92c16 0 29 13 29 29v75c0 16-13 29-29 29h-92c-16 0-29-13-29-29v-75z" fill="#d9efec"/>
+  <path d="M216 226h80M216 259h49" stroke="#0f766e" stroke-width="24" stroke-linecap="round"/>
+  <path d="M375 187c20 15 33 39 33 66s-13 51-33 66" fill="none" stroke="#fff0d8" stroke-width="26" stroke-linecap="round"/>
+</svg>

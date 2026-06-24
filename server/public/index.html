@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Debate Lab" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/assets/app-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/app-icon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Voice Debate Lab</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="/assets/app-icon.svg" alt="" class="brand-icon" />
+          <div>
+            <p class="eyebrow">Voice AI Agent</p>
+            <h1>Voice Debate Lab</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <span id="serverStatus" class="status-pill neutral">Checking</span>
+          <button id="installAppBtn" class="ghost-button" type="button" hidden>Install</button>
+          <button id="clearSessionBtn" class="ghost-button" type="button">Clear</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="column source-column" aria-label="Source and setup">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Source</p>
+                <h2>Import</h2>
+              </div>
+              <span id="sourceState" class="status-pill neutral">No source</span>
+            </div>
+            <label class="field">
+              <span>Title</span>
+              <input id="sourceTitle" type="text" placeholder="Optional source title" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Text</span>
+              <textarea
+                id="sourceText"
+                rows="8"
+                placeholder="Paste an article, prompt, transcript, or notes."
+              ></textarea>
+            </label>
+            <p id="sourceError" class="error-text" hidden></p>
+            <button id="createSourceBtn" class="primary-button" type="button">Create Brief</button>
+          </section>
+
+          <section id="briefPanel" class="panel" hidden>
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Brief</p>
+                <h2 id="briefTitle">Source Brief</h2>
+              </div>
+              <span id="chunkCount" class="status-pill">0 chunks</span>
+            </div>
+            <p id="briefSummary" class="body-copy"></p>
+            <div>
+              <h3>Key Claims</h3>
+              <ul id="keyClaims" class="plain-list"></ul>
+            </div>
+            <div>
+              <h3>Vocabulary</h3>
+              <div id="vocabularyList" class="chip-row"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Debate</p>
+                <h2>Setup</h2>
+              </div>
+            </div>
+            <div>
+              <h3>Motions</h3>
+              <div id="motionList" class="chip-row motion-row"></div>
+            </div>
+            <div class="two-col">
+              <label class="field">
+                <span>Your Stance</span>
+                <select id="stanceSelect">
+                  <option value="support">Support</option>
+                  <option value="oppose">Oppose</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Level</span>
+                <select id="levelSelect">
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate" selected>Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <h3>Opponent</h3>
+              <div id="personaList" class="persona-list"></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="column debate-column" aria-label="Debate workspace">
+          <section class="stage">
+            <div>
+              <p class="eyebrow">Current Motion</p>
+              <h2 id="activeMotion">Should AI be used in education?</h2>
+              <p id="stanceLine" class="muted-line">You support. AI opposes.</p>
+            </div>
+            <div class="stage-actions">
+              <label class="toggle-line">
+                <input id="speakToggle" type="checkbox" checked />
+                <span>Speak replies</span>
+              </label>
+              <span id="turnStatus" class="status-pill neutral">Ready</span>
+            </div>
+          </section>
+
+          <section class="panel composer">
+            <label class="field">
+              <span>Your Argument</span>
+              <textarea
+                id="argumentInput"
+                rows="5"
+                placeholder="Type your English argument here."
+              ></textarea>
+            </label>
+            <div class="button-row">
+              <button id="sendArgumentBtn" class="primary-button" type="button">Send Argument</button>
+              <button id="summarizeBtn" class="secondary-button" type="button" disabled>Summarize</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Conversation</p>
+                <h2>Debate Turns</h2>
+              </div>
+              <span id="turnCount" class="status-pill">0 turns</span>
+            </div>
+            <div id="conversationList" class="conversation-list">
+              <p class="empty-text">Your debate turns will appear here.</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="column coach-column" aria-label="Feedback">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Coach</p>
+                <h2>Feedback</h2>
+              </div>
+            </div>
+            <div id="feedbackView" class="feedback-stack"></div>
+          </section>
+
+          <section id="summaryPanel" class="panel" hidden>
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Session</p>
+                <h2>Summary</h2>
+              </div>
+            </div>
+            <div id="summaryView" class="summary-stack"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Trace</p>
+                <h2>Latency</h2>
+              </div>
+            </div>
+            <div id="latencyView" class="latency-list">
+              <p class="empty-text">No trace yet.</p>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
